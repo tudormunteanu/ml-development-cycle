@@ -4,18 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ML Development Cycle</title>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link rel="stylesheet" href="{{ '/css/styles.css' | url }}">
-    <script defer src="{{ '/js/alpine.min.js' | url }}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 </head>
-<body>
+<body class="bg-gray-50">
     {{ content | safe }}
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.effect(() => {
-                const modalOpen = Alpine.store('modalOpen');
-                document.body.classList.toggle('modal-open', modalOpen);
-            });
-        });
-    </script>
 </body>
 </html>
