@@ -4,6 +4,8 @@ layout: base.njk
 <div x-data="{ 
     modalOpen: false,
     modalContent: null,
+    selectedCompany: 'all',
+    selectedOpenSource: 'any',
     openModal(content) {
         this.modalContent = content;
         this.modalOpen = true;
@@ -14,6 +16,35 @@ layout: base.njk
         <h1 class="text-5xl font-bold mb-4">ML Development Cycle</h1>
         <p class="text-gray-600 text-xl">A summary of resources and platforms for<br>machine learning engineers, data analysts,<br>and DevOps</p>
     </header>
+
+    <!-- Filters -->
+    <div class="mb-8 flex justify-end gap-4">
+        <select 
+            x-model="selectedOpenSource" 
+            class="border rounded-lg px-4 py-2"
+        >
+            <option value="any">Any License</option>
+            <option value="yes">Open Source</option>
+            <option value="no">Proprietary</option>
+            <option value="hybrid">Hybrid</option>
+        </select>
+
+        <select 
+            x-model="selectedCompany" 
+            class="border rounded-lg px-4 py-2"
+        >
+            <option value="all">All Companies</option>
+            {% set companies = [] %}
+            {% for tool in tools %}
+                {% if tool.Company and (not companies.includes(tool.Company)) %}
+                    {% set companies = (companies.push(tool.Company), companies) %}
+                {% endif %}
+            {% endfor %}
+            {% for company in companies | sort %}
+                <option value="{{ company }}">{{ company | replace('_', ' ') }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
     <!-- Combined grid for all steps -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -29,6 +60,8 @@ layout: base.njk
             <div 
                 class="card hover:shadow-lg p-6"
                 style="background-color: {{ tool['Background Colour'] }}"
+                x-show="(selectedCompany === 'all' || selectedCompany === '{{ tool.Company }}') && 
+                        (selectedOpenSource === 'any' || selectedOpenSource === '{{ tool.open_source }}')"
                 @click="openModal({
                     title: `{{ tool.title }}`,
                     content: `{{ tool.content | safe }}`,
