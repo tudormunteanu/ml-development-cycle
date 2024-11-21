@@ -1,6 +1,7 @@
 const CleanCSS = require("clean-css");
 const htmlmin = require("html-minifier");
 const { minify } = require("terser");
+const { DateTime } = require("luxon");
 
 module.exports = function(eleventyConfig) {
     // Production mode check
@@ -44,6 +45,11 @@ module.exports = function(eleventyConfig) {
             minifyCSS: true,
             minifyJS: true
         });
+    });
+
+    // Add date filter
+    eleventyConfig.addFilter("date", function(date, format) {
+        return DateTime.now().toFormat(format);
     });
 
     return {
